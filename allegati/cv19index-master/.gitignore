@@ -1,0 +1,16 @@
+*ipynb_checkpoints*
+__pycache__
+.vscode
+tmp
+/.idea/
+/*.iml
+*.egg-info
+build
+dist
+venv/
+/junk.ipynb
+cv19index/resources/xgboost/output.csv
+cv19index/resources/xgboost/example_input.csv
+pytest.xml
+/predictions-*.csv
+/.pytest_cache/

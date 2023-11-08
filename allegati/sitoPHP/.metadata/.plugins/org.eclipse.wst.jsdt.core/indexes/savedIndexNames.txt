@@ -1,0 +1,6 @@
+INDEX VERSION 1.4+/opt/lampp/htdocs/covidSys/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+242091573.index
+3637008242.index
+1322051023.index
+2046033893.index
+1857178562.index

@@ -1,0 +1,50 @@
+<?php
+
+$host = "localhost";
+$dbusername = "root";
+$dbpassword="";
+$dbname = "Covid19";
+$conn = new mysqli($host, $dbusername, $dbpassword, $dbname);
+ 
+if($conn -> connect_errno){
+    echo "Nessuna connessione"; 
+    exit;
+}
+
+if(null !== ($_GET["CFmedico"]))
+    $CFmedico = $_GET["CFmedico"];
+
+    $sql = "SELECT P.CF, P.NOME, P.COGNO,E
+            FROM MEDICO M INNER JOIN PAZIENTE P ON M.CF = P.CFmedico
+            WHERE M.CF = '$CFmedico'";
+
+    $result = $conn -> query($sql);
+    while($row = $result -> fetch_object()) { 
+        print("<a href='visualizzazione.php/?cf=". $row -> cf."'>".$row -> nome." ". $row -> cognome);
+    }
+
+if(null !== ($_GET["cf"]))
+    $cf = $_GET["cf"];
+    $sql = "SELECT *
+            FROM Misurazione
+            WHERE IDpaziente = '$cf'";
+
+    $result = $conn -> query($sql); 
+    $row = $result -> fetch_assoc();
+    echo("<table><tr><th>IDmisurazione</th><th>Data</th><th>Ora</th><th>sp02</th><th>fr</th><th>fc</th><th>pi</th></tr>");
+    while($row = $result -> fetch_object()){
+        print("<tr><td>". $row -> IDmisurazione."</td>"."<td>". $row -> data."</td>"."<td>". $row -> ora."</td>"."<td>". $row -> sp02."</td>"."<td>". $row -> fr."</td>"."<td>". $row -> fc."</td>"."<td>". $row -> pi."</td>");   
+    }
+
+?>
+
+<!DOCTYPE HTML>
+<html>
+<body>
+<form method = "POST" action="visualizzazione.php">
+    Inserisca il suo codice fiscale qui:
+    <br><input type="text" name="CFmedico">
+    <input type="submit" value="INVIA">
+</form>
+</body>
+</html>

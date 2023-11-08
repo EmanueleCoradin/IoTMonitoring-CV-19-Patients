@@ -1,0 +1,107 @@
+<?php 
+#----------------------------------------------------------------------#
+#-------------------INIZIALIZZO CONNESSIONE DATABASE ------------------#
+#----------------------------------------------------------------------#
+
+$dbname = "monitoraggioDB";
+$username = "root";
+$password="";
+$host = "localhost";
+$conn = new mysqli ($host, $username, $password, $dbname);
+
+if(!$conn)
+    die("Errore di connessione al db: ".$conn -> connect_error);
+    
+#----------------------------------------------------------------------#
+#------------------------- INIZIALIZZO TABELLE ------------------------#
+#----------------------------------------------------------------------#
+
+#-------------------------- TABELLA MEDICO ---------------------------#
+$sql="
+    CREATE TABLE IF NOT EXISTS MEDICO(
+        CF varchar(32) not null,
+        nome varchar(32) not null,
+        cognome varchar(32) not null,
+        email varchar(32) not null,
+        password varchar(32) not null,
+        PRIMARY KEY (CF)
+    )";
+$result = $conn -> query($sql);
+
+if(!$result){
+    die("Errore creazione tabella Medico: ".$conn -> error);
+}
+
+#-------------------------- TABELLA PAZIENTE ---------------------------#
+
+$sql="
+    CREATE TABLE IF NOT EXISTS PAZIENTE(
+        CF varchar(32) not null,
+        nome varchar(32) not null,
+        cognome varchar(32) not null,
+        via varchar(32) not null,
+        numeroCivico int not null,
+        citta varchar(32) not null,
+        provincia varchar(32) not null,
+        regione varchar(32) not null,
+        dataNascita date not null,
+        sesso varchar(1) not null,
+        linkTG varchar(32) not null,
+        dataTrasferimento date,
+        email varchar(32) not null,
+        password varchar(32) not null,
+        CFmedico varchar(32) not null,
+        IDstruttura int,
+        PRIMARY KEY (CF),
+        FOREIGN KEY (CFmedico) REFERENCES MEDICO(CF),
+        FOREIGN KEY (IDstruttura) REFERENCES STRUTTURA(IDstruttura)
+    )";
+$result = $conn -> query($sql);
+
+if(!$result){
+    die("Errore creazione tabella Paziente: ".$conn -> error);
+}
+
+#-------------------------- TABELLA STRUTTURA ---------------------------#
+
+$sql="
+    CREATE TABLE IF NOT EXISTS STRUTTURA(
+        IDstruttura int not null,
+        nome varchar(32) not null,
+        via varchar(32) not null,
+        numeroCivico int not null,
+        citta varchar(32) not null,
+        provincia varchar(32) not null,
+        regione varchar(32) not null,
+        PRIMARY KEY (IDstruttura)
+    )";
+$result = $conn -> query($sql);
+
+if(!$result){
+    die("Errore creazione tabella Struttura: ".$conn -> error);
+}
+
+#-------------------------- TABELLA MISURAZIONE ---------------------------#
+
+$sql="
+    CREATE TABLE IF NOT EXISTS MISURAZIONE(
+        IDmisurazione int not null,
+        data date not null,
+        ora time not null,
+        sp02 float,
+        fr float,
+        fc float,
+        pi float,
+        IDpaziente varchar(32) not null,
+        PRIMARY KEY (IDmisurazione),
+        FOREIGN KEY IDpaziente REFERENCES PAZIENTE(CF)
+    )";
+$result = $conn -> query($sql);
+
+if(!$result){
+    die("Errore creazione tabella Misurazione: ".$conn -> error);
+}
+
+$conn -> close();
+               
+?>

@@ -1,0 +1,39 @@
+<?php
+include 'DBconnection.php';
+session_start();
+
+if(null !== ($_SESSION['CFmedico'])){
+    if(null !== ($_GET['IDpaziente'])){
+        $IDpaziente = $_GET['IDpaziente'];
+        $sql = "SELECT *
+            FROM MISURAZIONE
+            WHERE IDpaziente = '$IDpaziente'";
+        
+        $result = $conn -> query($sql);
+        echo("<table><tr><th>IDmisurazione</th><th>Data</th><th>Ora</th><th>sp02</th><th>fr</th><th>fc</th><th>pi</th></tr>");
+        while($row = $result -> fetch_object()){
+            echo("<tr><td>". $row -> IDmisurazione."</td>"."<td>". $row -> data."</td>"."<td>". $row -> ora."</td>"."<td>". $row -> sp02."</td>"."<td>". $row -> fr."</td>"."<td>". $row -> fc."</td>"."<td>". $row -> pi."</td>");
+        }
+        print("</table>");
+    }
+    else{
+        $CFmedico = $_SESSION['CFmedico'];
+        
+        $sql = "SELECT P.IDpaziente, P.nome, P.cognome
+                FROM MEDICO M INNER JOIN PAZIENTE P ON M.IDmedico = P.IDmedico
+                WHERE M.CF = '$CFmedico'";
+        
+        $result = $conn -> query($sql);
+        while($row = $result -> fetch_object()) { 
+            print("<a href='dashboard.php/?IDpaziente=". $row -> IDpaziente."'>".$row -> nome." ". $row -> cognome."<br>");
+        }
+    }
+}
+?>
+
+<!DOCTYPE HTML>
+<html>
+<body>
+
+</body>
+</html>

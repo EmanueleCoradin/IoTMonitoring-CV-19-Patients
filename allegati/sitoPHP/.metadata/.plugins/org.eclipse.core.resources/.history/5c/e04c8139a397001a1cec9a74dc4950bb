@@ -1,0 +1,53 @@
+<?php
+    include 'DBconnection.php';
+   session_start();
+?>
+
+   <html>
+   
+   <body>
+      
+      <h2>Scrivi il tuo Username e Password</h2> 
+
+         
+         <?php
+          $msg = '';
+            
+            if (isset($_POST['login']) && !empty($_POST['username']) 
+               && !empty($_POST['password'])) {
+               $username = $_POST['username'];
+               $password = $_POST['password'];
+               
+               $sql = " SELECT COUNT(*) as nRis
+                        FROM MEDICO
+                        WHERE CF = '$username' AND password= '$password'";
+               print($sql);
+               $result = $conn -> query($sql);
+               $esito = 0;
+               while($row = $result -> fetch_object()) {
+                   $esito = $row -> nRis;
+               }
+               
+               if ($esito == "1"){
+                  $_SESSION['username'] = "$username";   
+                  echo 'hai inserito user e password validi';
+               }else {
+                   $msg = 'sbagliato username o password';
+               }
+            }
+         ?>
+     
+
+      
+         <form method = "post">
+             <h4><?php echo $msg; ?></h4>
+            <input type = "text" name = "username" ><br>
+            <input type = "password" name = "password"  >
+            <button  type = "submit" name = "login">Login</button>
+         </form>
+	  <div>
+         pulisci la tua <a href = "logout.php" title = "Logout">Sessione</a>.
+      </div> 
+      
+   </body>
+</html>
